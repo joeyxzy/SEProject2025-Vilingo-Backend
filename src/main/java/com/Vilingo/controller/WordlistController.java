@@ -2,6 +2,7 @@ package com.Vilingo.controller;
 
 import com.Vilingo.dto.TranslationResponse;
 import com.Vilingo.dto.WordlistFetchInfoResponse;
+import com.Vilingo.dto.RandomWordResponse;
 import com.Vilingo.service.WordlistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,15 @@ public class WordlistController {
     public ResponseEntity<TranslationResponse> getTranslation(@RequestParam("name") String word) {
         return wordlistService.translateWord(word)
                 .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/randomword")
+    public ResponseEntity<RandomWordResponse> getRandomWords() {
+        return wordlistService.getRandomWords()
+                // 如果 Optional 中有值 (response)，则将其包装在 200 OK 响应中
+                .map(response -> ResponseEntity.ok(response))
+                // 如果 Optional 为空，则返回 404 Not Found 响应
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

@@ -1,9 +1,7 @@
 package com.Vilingo.entity; // 请替换为你的包名
-
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.Instant;
 
 @Entity
