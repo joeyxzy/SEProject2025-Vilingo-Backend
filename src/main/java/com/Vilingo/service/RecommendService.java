@@ -16,7 +16,7 @@ public class RecommendService {
     private final OssService ossService;
 
     // 将每页数量定义为常量，方便未来修改
-    private static final int PAGE_SIZE = 6;
+    private static final int PAGE_SIZE = 8;
 
     /**
      * 获取推荐视频信息流，并处理分页逻辑。

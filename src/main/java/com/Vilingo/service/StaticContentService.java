@@ -213,18 +213,18 @@ public class StaticContentService {
         List<RecommendVideoResponse> videos = new ArrayList<>();
 
         // 创建12个推荐视频，标题和ID都是直接指定的
-        videos.add(createRecommendation(2001, "Greetings & Introductions", 300, 101));
-        videos.add(createRecommendation(2002, "Introducing Yourself", 320, 102));
-        videos.add(createRecommendation(2003, "Saying Thank You", 310, 103));
-        videos.add(createRecommendation(2004, "How to Apologize", 330, 104));
-        videos.add(createRecommendation(2005, "Asking for Directions", 300, 105));
-        videos.add(createRecommendation(2006, "Telling Time", 340, 106));
-        videos.add(createRecommendation(2007, "Shopping for Clothes", 320, 107));
-        videos.add(createRecommendation(2008, "Simple Bargaining", 310, 108));
-        videos.add(createRecommendation(2009, "Ordering at a Restaurant", 350, 109));
-        videos.add(createRecommendation(2010, "Taking a Taxi", 300, 110));
-        videos.add(createRecommendation(2011, "Talking About Weather", 330, 111));
-        videos.add(createRecommendation(2012, "Booking a Hotel", 320, 112));
+        videos.add(createRecommendation(2001, "Do schools kill creativity?", 300, 101));
+        videos.add(createRecommendation(2002, "The inside story of ChatGPT's astonishing potential", 320, 102));
+        videos.add(createRecommendation(2003, "How to spot a liar", 310, 103));
+        videos.add(createRecommendation(2004, "The future we're building -- and boring", 330, 104));
+        videos.add(createRecommendation(2005, "How great leaders inspire action", 300, 105));
+        videos.add(createRecommendation(2006, "Rethinking infidelity ... a talk for anyone who has ever loved", 340, 106));
+        videos.add(createRecommendation(2007, "How to speak so that people want to listen", 320, 107));
+        videos.add(createRecommendation(2008, "What makes a good life? Lessons from the longest study on happiness", 310, 108));
+        videos.add(createRecommendation(2009, "The next outbreak? We're not ready", 350, 109));
+        videos.add(createRecommendation(2010, "Your body language may shape who you are", 300, 110));
+        videos.add(createRecommendation(2011, "How we can help the \"forgotten middle\" reach their full potential", 330, 111));
+        videos.add(createRecommendation(2012, "How generational stereotypes hold us back at work", 320, 112));
 
         return videos;
     }
