@@ -1,4 +1,4 @@
-package com.Vilingo.service;
+package com.Vilingo.service; // 请替换为您的包名
 
 import com.Vilingo.dto.RecommendVideoFetchResponse;
 import com.Vilingo.dto.RecommendVideoResponse;
@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -15,55 +17,42 @@ public class RecommendService {
     private final StaticContentService staticContentService;
     private final OssService ossService;
 
-    // 将每页数量定义为常量，方便未来修改
     private static final int PAGE_SIZE = 8;
 
-    /**
-     * 获取推荐视频信息流，并处理分页逻辑。
-     * @param before 上一页最后一条记录的ID，作为分页游标。如果为null，则从头开始。
-     * @return 组装好的、包含分页信息和URL的响应对象。
-     */
-    public RecommendVideoFetchResponse getRecommendations(Integer before) {
-        // 1. 从静态数据源获取所有“被推荐”视频的完整列表
+    public RecommendVideoFetchResponse getRecommendations(Integer before, String status) {
+        // 1. 获取所有视频的原始列表
         List<RecommendVideoResponse> allVideos = staticContentService.getRecommendedVideos();
 
-        // 2. 根据游标(before)找到分页的起始索引
+        // 2. 核心：调用新的、基于章节索引的排序方法
+        List<RecommendVideoResponse> sortedVideos = sortVideosByChapterIndex(allVideos, status);
+
+        // 3. 后续的分页逻辑完全建立在“排序后”的列表之上，这部分无需修改
         int startIndex = 0;
         if (before != null) {
-            // 遍历整个列表，找到游标所在的位置
-            for (int i = 0; i < allVideos.size(); i++) {
-                if (allVideos.get(i).getId() == before) {
-                    startIndex = i + 1; // 分页从游标的下一个元素开始
+            for (int i = 0; i < sortedVideos.size(); i++) {
+                if (sortedVideos.get(i).getId() == before) {
+                    startIndex = i + 1;
                     break;
                 }
             }
         }
 
-        // 3. 根据起始索引和固定的页面大小，获取当前页的子列表
         List<RecommendVideoResponse> pageVideos = new ArrayList<>();
-        // 计算结束索引，并用 Math.min 防止数组越界
-        int endIndex = Math.min(startIndex + PAGE_SIZE, allVideos.size());
+        int endIndex = Math.min(startIndex + PAGE_SIZE, sortedVideos.size());
         for (int i = startIndex; i < endIndex; i++) {
-            pageVideos.add(allVideos.get(i));
+            pageVideos.add(sortedVideos.get(i));
         }
 
-        // 4. 判断是否存在下一页
-        boolean hasNextPage = endIndex < allVideos.size();
-
-        // 5. 生成用于下一页的游标 (nextCursor)
+        boolean hasNextPage = endIndex < sortedVideos.size();
         String nextCursor = null;
-        // 只有在当前页不为空且存在下一页时，才生成游标
         if (!pageVideos.isEmpty() && hasNextPage) {
-            // 下一页的游标是当前页最后一个元素的 ID
             nextCursor = String.valueOf(pageVideos.get(pageVideos.size() - 1).getId());
         }
 
-        // 6. 处理当前页的数据：为每个视频的封面生成URL，并进行深拷贝以防修改缓存
         List<RecommendVideoResponse> processedData = pageVideos.stream()
                 .map(this::createDeepCopyAndGenerateUrl)
                 .toList();
 
-        // 7. 组装并返回最终的响应对象
         return new RecommendVideoFetchResponse(
                 processedData,
                 hasNextPage,
@@ -73,9 +62,69 @@ public class RecommendService {
     }
 
     /**
-     * 对单个推荐视频对象进行深拷贝，并为其封面生成URL。
-     * @param original 包含OSS Key的原始对象
-     * @return 包含完整URL的全新对象
+     * 新的核心排序逻辑：根据前端传递的 1-8 的章节索引，对视频进行排序。
+     */
+    private List<RecommendVideoResponse> sortVideosByChapterIndex(List<RecommendVideoResponse> videos, String status) {
+        // 步骤 A: 首先，按难度将所有视频分组
+        Map<String, List<RecommendVideoResponse>> videosByDifficulty = videos.stream()
+                .collect(Collectors.groupingBy(RecommendVideoResponse::getDifficulty));
+
+        List<RecommendVideoResponse> easyVideos = videosByDifficulty.getOrDefault("easy", new ArrayList<>());
+        List<RecommendVideoResponse> mediumVideos = videosByDifficulty.getOrDefault("medium", new ArrayList<>());
+        List<RecommendVideoResponse> hardVideos = videosByDifficulty.getOrDefault("hard", new ArrayList<>());
+
+        // 步骤 B: 从 status 字符串中解析出 chapter 索引 (1-8)
+        int chapterIndex = parseChapterIndexFromStatus(status);
+
+        // 步骤 C: 根据 chapter 索引决定最终的拼接顺序
+        List<RecommendVideoResponse> sortedList = new ArrayList<>();
+
+        // 规则 1: 进度在第 1-2 章 -> 优先推荐 easy
+        if (chapterIndex <= 2) {
+            sortedList.addAll(easyVideos);
+            sortedList.addAll(mediumVideos);
+            sortedList.addAll(hardVideos);
+        }
+        // 规则 2: 进度在第 3-4 章 -> 优先推荐 medium
+        else if (chapterIndex <= 4) {
+            sortedList.addAll(mediumVideos);
+            sortedList.addAll(hardVideos);
+            sortedList.addAll(easyVideos);
+        }
+        // 规则 3: 进度在第 5-8 章 -> 优先推荐 hard
+        else {
+            sortedList.addAll(hardVideos);
+            sortedList.addAll(easyVideos);
+            sortedList.addAll(mediumVideos);
+        }
+
+        return sortedList;
+    }
+
+    /**
+     * 辅助方法：从 status 字符串中安全地解析出 chapter 索引 (1-8)。
+     */
+    private int parseChapterIndexFromStatus(String status) {
+        // 默认返回 1，代表第一章，会触发 easy 优先逻辑
+        final int DEFAULT_CHAPTER_INDEX = 1;
+
+        if (status == null || status.isBlank()) {
+            return DEFAULT_CHAPTER_INDEX;
+        }
+        try {
+            String[] parts = status.split("-");
+            if (parts.length >= 2) {
+                return Integer.parseInt(parts[1]); // 返回第二个位置的值，即 chapter 索引
+            }
+        } catch (Exception e) {
+            // 解析失败，同样返回默认值
+            return DEFAULT_CHAPTER_INDEX;
+        }
+        return DEFAULT_CHAPTER_INDEX;
+    }
+
+    /**
+     * 辅助方法：深拷贝并生成URL (保持不变)
      */
     private RecommendVideoResponse createDeepCopyAndGenerateUrl(RecommendVideoResponse original) {
         RecommendVideoResponse copy = new RecommendVideoResponse();

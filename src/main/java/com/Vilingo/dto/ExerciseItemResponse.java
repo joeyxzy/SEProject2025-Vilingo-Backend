@@ -1,6 +1,5 @@
 package com.Vilingo.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
@@ -13,9 +12,9 @@ import lombok.Data;
 )
 @JsonSubTypes({
         // 在这里注册所有可能的子类
-        @JsonSubTypes.Type(value = VideoExerciseResponse.class, name = "video")
+        @JsonSubTypes.Type(value = VideoExerciseResponse.class, name = "video"),
         // 如果未来有复述练习，可以加在这里：
-        // @JsonSubTypes.Type(value = RetellingExerciseResponse.class, name = "retelling")
+        @JsonSubTypes.Type(value = RetellingExerciseResponse.class, name = "retelling")
 })
 @Data
 public abstract class ExerciseItemResponse {

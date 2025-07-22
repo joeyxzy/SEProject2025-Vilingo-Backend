@@ -22,106 +22,114 @@ public class StaticContentService {
     }
 
     private Map<Integer, ExerciseInfoResponse> initializeExercises() {
-        // 使用 HashMap 和 put，比超长的 Map.of() 更清晰
         Map<Integer, ExerciseInfoResponse> exerciseMap = new HashMap<>();
 
-        // --- 练习 101 ---
-        VideoExerciseResponse item101 = new VideoExerciseResponse();
-        item101.setId(1011);
-        item101.setVideoKey("video/1011video.mp4");
-        item101.setSrtKey("srt/1011srt.srt");
+        // --- 练习 101: Greetings ---
+        VideoExerciseResponse video101 = new VideoExerciseResponse();
+        video101.setId(1011);
+        video101.setVideoKey("video/1011video.mp4");
+        video101.setSrtKey("srt/1011srt.srt");
+        RetellingExerciseResponse retelling101 = new RetellingExerciseResponse(1012, "Sir Ken Robinson makes an entertaining and profoundly moving case for creating an education system that nurtures (rather than undermines) creativity.");
         ExerciseInfoResponse exercise101 = new ExerciseInfoResponse();
         exercise101.setXp(10);
         exercise101.setDifficulty("easy");
-        exercise101.setItems(List.of(item101));
+        exercise101.setItems(List.of(video101, retelling101));
         exerciseMap.put(101, exercise101);
 
-        // --- 练习 102 ---
-        VideoExerciseResponse item102 = new VideoExerciseResponse();
-        item102.setId(1021);
-        item102.setVideoKey("video/1021video.mp4");
-        item102.setSrtKey("srt/1021srt.srt");
+        // --- 练习 102: Introductions ---
+        VideoExerciseResponse video102 = new VideoExerciseResponse();
+        video102.setId(1021);
+        video102.setVideoKey("video/1021video.mp4");
+        video102.setSrtKey("srt/1021srt.srt");
+        RetellingExerciseResponse retelling102 = new RetellingExerciseResponse(1022, "In a talk from the cutting edge of technology, OpenAI cofounder Greg Brockman explores the underlying design principles of ChatGPT and demos some mind-blowing, unreleased plug-ins for the chatbot that sent shockwaves across the world. After the talk, head of TED Chris Anderson joins Brockman to dig into the timeline of ChatGPT's development and get Brockman's take on the risks, raised by many in the tech industry and beyond, of releasing such a powerful tool into the world.");
         ExerciseInfoResponse exercise102 = new ExerciseInfoResponse();
         exercise102.setXp(15);
         exercise102.setDifficulty("easy");
-        exercise102.setItems(List.of(item102));
+        exercise102.setItems(List.of(video102, retelling102));
         exerciseMap.put(102, exercise102);
 
-        // --- 练习 103 (新增) ---
-        VideoExerciseResponse item103 = new VideoExerciseResponse();
-        item103.setId(1031);
-        item103.setVideoKey("video/1031video.mp4");
-        item103.setSrtKey("srt/1031srt.srt");
+        // --- 练习 103: Gratitude ---
+        VideoExerciseResponse video103 = new VideoExerciseResponse();
+        video103.setId(1031);
+        video103.setVideoKey("video/1031video.mp4");
+        video103.setSrtKey("srt/1031srt.srt");
+        RetellingExerciseResponse retelling103 = new RetellingExerciseResponse(1032, "On any given day we're lied to from 10 to 200 times, and the clues to detect those lies can be subtle and counter-intuitive. Pamela Meyer, author of \"Liespotting,\" shows the manners and \"hotspots\" used by those trained to recognize deception -- and she argues honesty is a value worth preserving. (Contains mature content)");
         ExerciseInfoResponse exercise103 = new ExerciseInfoResponse();
         exercise103.setXp(15);
         exercise103.setDifficulty("easy");
-        exercise103.setItems(List.of(item103));
+        exercise103.setItems(List.of(video103, retelling103));
         exerciseMap.put(103, exercise103);
 
-        // --- 练习 104 (新增) ---
-        VideoExerciseResponse item104 = new VideoExerciseResponse();
-        item104.setId(1041);
-        item104.setVideoKey("video/1041video.mp4");
-        item104.setSrtKey("srt/1041srt.srt");
+        // --- 练习 104: Apologies ---
+        VideoExerciseResponse video104 = new VideoExerciseResponse();
+        video104.setId(1041);
+        video104.setVideoKey("video/1041video.mp4");
+        video104.setSrtKey("srt/1041srt.srt");
+        RetellingExerciseResponse retelling104 = new RetellingExerciseResponse(1042, "Elon Musk discusses his new project digging tunnels under LA, the latest from Tesla and SpaceX and his motivation for building a future on Mars in conversation with TED's Head Curator, Chris Anderson.");
         ExerciseInfoResponse exercise104 = new ExerciseInfoResponse();
         exercise104.setXp(18);
         exercise104.setDifficulty("easy");
-        exercise104.setItems(List.of(item104));
+        exercise104.setItems(List.of(video104, retelling104));
         exerciseMap.put(104, exercise104);
 
-        // --- 练习 105 (新增) ---
-        VideoExerciseResponse item105 = new VideoExerciseResponse();
-        item105.setId(1051);
-        item105.setVideoKey("video/1051video.mp4");
-        item105.setSrtKey("srt/1051srt.srt");
+        // --- 练习 105: Asking Directions ---
+        VideoExerciseResponse video105 = new VideoExerciseResponse();
+        video105.setId(1051);
+        video105.setVideoKey("video/1051video.mp4");
+        video105.setSrtKey("srt/1051srt.srt");
+        RetellingExerciseResponse retelling105 = new RetellingExerciseResponse(1052, "Simon Sinek explains inspiring leadership through a simple yet powerful model, the core of which is a \"Golden Circle,\" meaning the fundamental source of leader qualities is answering \"Why?\". He cites successful examples like Apple Inc., Martin Luther King Jr., and the Wright brothers, while using TiVo's digital video recorder as a typical case of failure. Although TiVo recently won a lawsuit, causing its stock price to triple, it is still struggling.");
         ExerciseInfoResponse exercise105 = new ExerciseInfoResponse();
         exercise105.setXp(20);
-        exercise105.setDifficulty("medium"); // 难度提升
-        exercise105.setItems(List.of(item105));
+        exercise105.setDifficulty("medium");
+        exercise105.setItems(List.of(video105, retelling105));
         exerciseMap.put(105, exercise105);
 
-        // --- 练习 106 (新增) ---
-        VideoExerciseResponse item106 = new VideoExerciseResponse();
-        item106.setId(1061);
-        item106.setVideoKey("video/1061video.mp4");
-        item106.setSrtKey("srt/1061srt.srt");
+        // --- 练习 106: Telling Time ---
+        VideoExerciseResponse video106 = new VideoExerciseResponse();
+        video106.setId(1061);
+        video106.setVideoKey("video/1061video.mp4");
+        video106.setSrtKey("srt/1061srt.srt");
+        RetellingExerciseResponse retelling106 = new RetellingExerciseResponse(1062, "Infidelity is the ultimate betrayal. But does it have to be? Relationship therapist Esther Perel examines why people cheat, and unpacks why affairs are so traumatic: because they threaten our emotional security. In infidelity, she sees something unexpected — an expression of longing and loss. A must-watch for anyone who has ever cheated or been cheated on, or who simply wants a new framework for understanding relationships.");
         ExerciseInfoResponse exercise106 = new ExerciseInfoResponse();
         exercise106.setXp(20);
         exercise106.setDifficulty("medium");
-        exercise106.setItems(List.of(item106));
+        exercise106.setItems(List.of(video106, retelling106));
         exerciseMap.put(106, exercise106);
 
-        // --- 练习 107 (新增) ---
-        VideoExerciseResponse item107 = new VideoExerciseResponse();
-        item107.setId(1071);
-        item107.setVideoKey("video/1071video.mp4");
-        item107.setSrtKey("srt/1071srt.srt");
+        // --- 练习 107: Shopping ---
+        VideoExerciseResponse video107 = new VideoExerciseResponse();
+        video107.setId(1071);
+        video107.setVideoKey("video/1071video.mp4");
+        video107.setSrtKey("srt/1071srt.srt");
+        RetellingExerciseResponse retelling107 = new RetellingExerciseResponse(1072, "Have you ever felt like you're talking, but nobody is listening? Here's Julian Treasure to help. In this useful talk, the sound expert demonstrates the how-to's of powerful speaking -- from some handy vocal exercises to tips on how to speak with empathy. A talk that might help the world sound more beautiful.");
         ExerciseInfoResponse exercise107 = new ExerciseInfoResponse();
         exercise107.setXp(22);
         exercise107.setDifficulty("medium");
-        exercise107.setItems(List.of(item107));
+        exercise107.setItems(List.of(video107, retelling107));
         exerciseMap.put(107, exercise107);
 
-        // --- 练习 108 (新增) ---
-        VideoExerciseResponse item108 = new VideoExerciseResponse();
-        item108.setId(1081);
-        item108.setVideoKey("video/1081video.mp4");
-        item108.setSrtKey("srt/1081srt.srt");
+        // --- 练习 108: Bargaining ---
+        VideoExerciseResponse video108 = new VideoExerciseResponse();
+        video108.setId(1081);
+        video108.setVideoKey("video/1081video.mp4");
+        video108.setSrtKey("srt/1081srt.srt");
+        RetellingExerciseResponse retelling108 = new RetellingExerciseResponse(1082, "What keeps us happy and healthy as we go through life? If you think it's fame and money, you're not alone – but, according to psychiatrist Robert Waldinger, you're mistaken. As the director of a 75-year-old study on adult development, Waldinger has unprecedented access to data on true happiness and satisfaction. In this talk, he shares three important lessons learned from the study as well as some practical, old-as-the-hills wisdom on how to build a fulfilling, long life.");
         ExerciseInfoResponse exercise108 = new ExerciseInfoResponse();
         exercise108.setXp(25);
-        exercise108.setDifficulty("hard"); // 难度提升
-        exercise108.setItems(List.of(item108));
+        exercise108.setDifficulty("hard");
+        exercise108.setItems(List.of(video108, retelling108));
         exerciseMap.put(108, exercise108);
 
-        // --- 练习 109 ---
-        VideoExerciseResponse item109 = new VideoExerciseResponse();
-        item109.setId(1091);
-        item109.setVideoKey("video/1091video.mp4");
-        item109.setSrtKey("srt/1091srt.srt");
+        // --- 练习 109: Ordering Food ---
+        VideoExerciseResponse video109 = new VideoExerciseResponse();
+        video109.setId(1091);
+        video109.setVideoKey("video/1091video.mp4");
+        video109.setSrtKey("srt/1091srt.srt");
+        RetellingExerciseResponse retelling109 = new RetellingExerciseResponse(1092, "In 2014, the world avoided a global outbreak of Ebola, thanks to thousands of selfless health workers -- plus, frankly, some very good luck. In hindsight, we know what we should have done better. So, now's the time, Bill Gates suggests, to put all our good ideas into practice, from scenario planning to vaccine research to health worker training. As he says, \"There's no need to panic ... but we need to get going.\"");
         ExerciseInfoResponse exercise109 = new ExerciseInfoResponse();
         exercise109.setXp(20);
         exercise109.setDifficulty("medium");
-        exercise109.setItems(List.of(item109));
+        exercise109.setItems(List.of(video109, retelling109));
         exerciseMap.put(109, exercise109);
 
         return exerciseMap;
@@ -209,38 +217,63 @@ public class StaticContentService {
         return List.of(unifiedSection);
     }
 
+    // 在 StaticContentService.java 中
+
+    /**
+     * 推荐视频初始化方法，已扩充至16个视频。
+     */
+// 在 StaticContentService.java 中
+
+    /**
+     * 推荐视频初始化方法，已扩充至16个视频，并重新应用了难度分级。
+     */
     private List<RecommendVideoResponse> initializeRecommendedVideos() {
         List<RecommendVideoResponse> videos = new ArrayList<>();
 
-        // 创建12个推荐视频，标题和ID都是直接指定的
-        videos.add(createRecommendation(2001, "Do schools kill creativity?", 300, 101));
-        videos.add(createRecommendation(2002, "The inside story of ChatGPT's astonishing potential", 320, 102));
-        videos.add(createRecommendation(2003, "How to spot a liar", 310, 103));
-        videos.add(createRecommendation(2004, "The future we're building -- and boring", 330, 104));
-        videos.add(createRecommendation(2005, "How great leaders inspire action", 300, 105));
-        videos.add(createRecommendation(2006, "Rethinking infidelity ... a talk for anyone who has ever loved", 340, 106));
-        videos.add(createRecommendation(2007, "How to speak so that people want to listen", 320, 107));
-        videos.add(createRecommendation(2008, "What makes a good life? Lessons from the longest study on happiness", 310, 108));
-        videos.add(createRecommendation(2009, "The next outbreak? We're not ready", 350, 109));
-        videos.add(createRecommendation(2010, "Your body language may shape who you are", 300, 110));
-        videos.add(createRecommendation(2011, "How we can help the \"forgotten middle\" reach their full potential", 330, 111));
-        videos.add(createRecommendation(2012, "How generational stereotypes hold us back at work", 320, 112));
+        // --- Easy Difficulty (4 videos) ---
+        videos.add(createRecommendation(2001, "Do schools kill creativity?", 300, 101, "easy"));
+        videos.add(createRecommendation(2002, "The inside story of ChatGPT's astonishing potential", 320, 102, "easy"));
+        videos.add(createRecommendation(2003, "How to spot a liar", 310, 103, "easy"));
+        videos.add(createRecommendation(2004, "The future we're building -- and boring", 330, 104, "easy"));
+
+        // --- Medium Difficulty (4 videos) ---
+        videos.add(createRecommendation(2005, "How great leaders inspire action", 300, 105, "medium"));
+        videos.add(createRecommendation(2006, "Rethinking infidelity ... a talk for anyone who has ever loved", 340, 106, "medium"));
+        videos.add(createRecommendation(2007, "How to speak so that people want to listen", 320, 107, "medium"));
+        videos.add(createRecommendation(2008, "What makes a good life? Lessons from the longest study on happiness", 310, 108, "medium"));
+
+        // --- Hard Difficulty (4 videos) ---
+        videos.add(createRecommendation(2009, "The next outbreak? We're not ready", 350, 109, "hard"));
+        videos.add(createRecommendation(2010, "Your body language may shape who you are", 300, 110, "hard"));
+        videos.add(createRecommendation(2011, "How we can help the \"forgotten middle\" reach their full potential", 330, 111, "hard"));
+        videos.add(createRecommendation(2012, "How generational stereotypes hold us back at work", 320, 112, "hard"));
+
+        // --- Expert Difficulty (新增的4个，定义为 'hard' 或一个新的难度等级) ---
+        // 为了保持每4个一个难度，我们继续使用 'hard'，或者你可以定义一个新的，比如 'expert'。
+        // 这里我们继续用 'hard' 来确保推荐逻辑能找到它们。
+        videos.add(createRecommendation(2013, "Are you following your dreams?", 310, 113, "hard"));
+        videos.add(createRecommendation(2014, "How did Hitler rise to power?", 340, 114, "hard"));
+        videos.add(createRecommendation(2015, "How I Made OVER $2,000 From ONE Video", 300, 115, "hard"));
+        videos.add(createRecommendation(2016, "WW84 | Opening Scene", 320, 116, "hard"));
 
         return videos;
     }
 
     /**
-     * 一个辅助方法，用于快速创建 RecommendVideoResponse 对象，让代码更整洁。
+     * 更新辅助方法，增加 difficulty 参数。
      */
-    private RecommendVideoResponse createRecommendation(int id, String title, int height, int eid) {
+    private RecommendVideoResponse createRecommendation(int id, String title, int height, int eid, String difficulty) {
         var rec = new RecommendVideoResponse();
         rec.setId(id);
         rec.setTitle(title);
         rec.setHeight(height);
         rec.setEid(eid);
-        // 封面 Key 的命名规则与练习项ID关联 (例如 eid=101 -> coverKey="cover/1011.jpg")
+        rec.setDifficulty(difficulty); // 设置难度
+
         int exerciseItemId = eid * 10 + 1;
+        // 确保封面Key的命名是正确的
         rec.setCoverKey("cover/" + exerciseItemId + "cover" + ".jpg");
+
         return rec;
     }
 }

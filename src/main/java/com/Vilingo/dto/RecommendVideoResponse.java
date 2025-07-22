@@ -17,4 +17,6 @@ public class RecommendVideoResponse {
     // 并用 @JsonIgnore 确保它不会出现在最终的JSON响应中。
     @JsonIgnore
     private String coverKey;
+    @JsonIgnore
+    private String difficulty;
 }
