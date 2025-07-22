@@ -1,33 +1,20 @@
-package com.Vilingo.service;
+package com.Vilingo.service; // 请替换为你的包名
 
-import com.Vilingo.dto.ExerciseInfoResponse;
-import com.Vilingo.dto.ExerciseItemResponse;
-import com.Vilingo.dto.SectionInfoResponse;
-import com.Vilingo.dto.VideoExerciseResponse;
-import com.Vilingo.dto.RetellingExerciseResponse;
+import com.Vilingo.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * 负责处理所有与“内容”相关的业务逻辑。
- * 它作为一个协调者，从静态仓库获取数据，并调用OSS服务生成动态URL。
- */
 @Service
 @RequiredArgsConstructor
 public class ContentService {
 
     private final StaticContentService staticContentService;
-    private final UserStateService userStateService;
     private final OssService ossService;
 
-    /**
-     * 获取完整的、本地化的章节列表。
-     * @param lang 语言参数 (当前版本中未使用，为未来扩展保留)
-     * @return 包含所有章节信息的列表
-     */
+    // getSections 方法保持不变
     public List<SectionInfoResponse> getSections(String lang) {
         // 直接从静态数据仓库获取预先定义好的课程结构
         if(lang.equals("en"))
@@ -36,50 +23,37 @@ public class ContentService {
             return null;
     }
 
+    /**
+     * 新逻辑：根据ID获取单个练习的详细信息，
+     * 并将所有关联的练习项（Video 和 Retelling）一次性返回。
+     */
     public ExerciseInfoResponse getExercise(Integer id) {
+        // 1. 从静态数据仓库获取原始练习数据 (items 列表包含两种类型)
         ExerciseInfoResponse originalExercise = staticContentService.findExerciseById(id);
 
         if (originalExercise == null) {
-            return null;
+            return null; // ID 不存在，返回 null
         }
 
-        // 关键逻辑：判断是否是首次访问
-        boolean firstVisit = userStateService.isFirstVisit(id);
+        // 2. 创建一个深拷贝，以避免修改静态缓存
+        ExerciseInfoResponse exerciseToReturn = deepCopy(originalExercise);
 
-        // 创建一个深拷贝，以避免修改静态缓存
-        ExerciseInfoResponse exerciseForUser = deepCopy(originalExercise);
-
-        // 根据访问状态，过滤出需要的练习项
-        List<ExerciseItemResponse> filteredItems;
-        if (firstVisit) {
-            // 第一次访问：只保留 Video 类型的项
-            filteredItems = exerciseForUser.getItems().stream()
-                    .filter(item -> item instanceof VideoExerciseResponse)
-                    .toList();
-        } else {
-            // 非第一次访问：只保留 Retelling 类型的项
-            filteredItems = exerciseForUser.getItems().stream()
-                    .filter(item -> item instanceof RetellingExerciseResponse)
-                    .toList();
-        }
-
-        // 将过滤后的列表设置回 DTO
-        exerciseForUser.setItems(filteredItems);
-
-        // 遍历过滤后的列表，处理需要生成URL的项 (只有video项需要)
-        exerciseForUser.getItems().forEach(item -> {
+        // 3. 遍历所有练习项，为其中的 Video 项生成 URL
+        exerciseToReturn.getItems().forEach(item -> {
             if (item instanceof VideoExerciseResponse videoItem) {
                 String videoUrl = ossService.generatePresignedUrl(videoItem.getVideoKey());
                 String srtUrl = ossService.generatePresignedUrl(videoItem.getSrtKey());
                 videoItem.setVideo(videoUrl);
                 videoItem.setSrt(srtUrl);
             }
+            // Retelling 项不需要特殊处理，直接返回即可
         });
 
-        return exerciseForUser;
+        // 4. 返回包含了所有练习项的完整 Exercise DTO
+        return exerciseToReturn;
     }
 
-    // deepCopy 方法需要能处理两种类型的 item
+    // deepCopy 方法现在是正确的，因为它已经支持处理两种类型的 item
     private ExerciseInfoResponse deepCopy(ExerciseInfoResponse original) {
         ExerciseInfoResponse copy = new ExerciseInfoResponse();
         copy.setXp(original.getXp());
@@ -95,8 +69,6 @@ public class ContentService {
                         return videoCopy;
                     }
                     if (item instanceof RetellingExerciseResponse retellingItem) {
-                        // 直接返回原始对象，因为它是不可变的(只有String)
-                        // 或者创建一个新的拷贝
                         return new RetellingExerciseResponse(retellingItem.getId(), retellingItem.getContent());
                     }
                     return null;
